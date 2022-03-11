@@ -1,10 +1,9 @@
 // this would be random heading, on midPointCircle
-function newChar() {
-    let c = Math.floor(Math.random(63, 122))
-    if (c === 63) c = 32;
-    if (c === 64) c = 46;
 
-    return String.fromCharCode(c);
+function newChar() {
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+   return characters.charAt(Math.floor(Math.random() * characters.length))
 }
 
 class DNA {
@@ -33,7 +32,7 @@ class DNA {
     crossover (partner) {
         let child = new DNA(this.genes.length);
         
-        let midpoint = floor(random(this.genes.length));
+        let midpoint = Math.floor(Math.random(this.genes.length));
 
         for(let i = 0; i < this.genes.length; i++){
             if(i > midpoint) child.genes[i] = this.genes[i];
@@ -45,7 +44,7 @@ class DNA {
 
     mutate(mutationRate) {
         for(let i = 0; i < this.genes.length; i++){
-            if(random(1) < mutationRate) {
+            if(Math.random(1) < mutationRate) {
                 this.genes[i] = newChar();
             }
         }

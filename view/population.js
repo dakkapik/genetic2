@@ -35,19 +35,32 @@ class Population {
         }
 
         for(let i = 0; i < this.population.length; i++) {
-            let fitness = map(this.population[i].fitness, 0, maxFitness, 0, 1);
-            let n = floor(fitness * 100);
+            // scale from this.population[i].fitness 
+            // 0 > maxfitness
+            // 0 > 1 
+            console.log(this.population[i])
+            
+            const power = this.population[i].fitness.toString().length
+            const divider = Math.pow(10, power)
+            
+            let fitness = this.population[i].fitness / divider
+            console.log("fitness: ",fitness)
+            
+            
+            let n = Math.round(fitness * 100);
 
             for (let j = 0; j < n; j++) {
                 this.matingPool.push(this.population[i]);
             }
         }
+
     }
 
     generate () {
         for(let i = 0; i < this.population.length; i++){
-            let a = floor(random(this.matingPool.length));
-            let b = floor(random(this.matingPool.length));
+            let a = Math.floor(Math.random(this.matingPool.length));
+            let b = Math.floor(Math.random(this.matingPool.length));
+            console.log(b)
             let partnerA = this.matingPool[a];
             let partnerB = this.matingPool[b];
             let child = partnerA.crossover(partnerB);
