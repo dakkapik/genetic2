@@ -1,10 +1,10 @@
 class Population {
     constructor (p, m, num) {
-        this.population;
-        this.matingPool;
-        this.generations = 0;
-        this.finished = false; 
-        this.target = p;
+        this.population; //current population
+        this.matingPool; //ArrayList for mating
+        this.generations = 0; // number of generations passed
+        this.finished = false; // done?
+        this.target = p; 
         this.mutationRate = m;
         this.perfectScore = 1;
 
@@ -12,6 +12,7 @@ class Population {
 
         this.population = [];
 
+        // num = length of population
         for(let i = 0; i < num; i ++) {
             this.population[i] = new DNA(this.target.length)
         }
@@ -26,48 +27,46 @@ class Population {
         }
     }
 
-    naturalSelection () {
-        this.matingPool = [];
-
+    generate () {
+        // this should be oposite for to calculate the least number, or calculate most cells covered?
         let maxFitness = 0;
         for(let i = 0; i < this.population.length; i ++) {
-            maxFitness = this.population[i].fitness;
-        }
-
-        for(let i = 0; i < this.population.length; i++) {
-            // scale from this.population[i].fitness 
-            // 0 > maxfitness
-            // 0 > 1 
-            console.log(this.population[i])
-            
-            const power = this.population[i].fitness.toString().length
-            const divider = Math.pow(10, power)
-            
-            let fitness = this.population[i].fitness / divider
-            console.log("fitness: ",fitness)
-            
-            
-            let n = Math.round(fitness * 100);
-
-            for (let j = 0; j < n; j++) {
-                this.matingPool.push(this.population[i]);
+            if(this.population[i].fitness > maxFitness) { 
+                maxFitness = this.population[i].fitness;
             }
         }
-
-    }
-
-    generate () {
-        for(let i = 0; i < this.population.length; i++){
-            let a = Math.floor(Math.random(this.matingPool.length));
-            let b = Math.floor(Math.random(this.matingPool.length));
-            console.log(b)
-            let partnerA = this.matingPool[a];
-            let partnerB = this.matingPool[b];
+        
+        let newPopulation = [];
+        for(let i = 0; i < this.population.length; i++) {
+            let partnerA = this.acceptReject(maxFitness);
+            let partnerB = this.acceptReject(maxFitness);
             let child = partnerA.crossover(partnerB);
             child.mutate(this.mutationRate);
-            this.population[i] = child;
+            newPopulation[i] = child;
         }
-        this.generations ++;
+
+        this.population = newPopulation;
+        this.generations++;
+    }
+
+    acceptReject(maxFitness){
+        let besafe = 0
+        while (true) {
+            let index = Math.floor(Math.random() * this.population.length);
+            let partner = this.population[index];
+            let r = Math.random() * maxFitness;
+            // console.log("PARTNER FITNESS: ", partner.fitness)
+            // console.log("FITNESS BENCHMARK: ", r)
+            if(r < partner.fitness){
+                return partner
+            }
+
+            besafe++;
+            if(besafe > 10000) {
+                console.error("partner not found")
+                return null
+            }
+        }
     }
 
     getBest() {
@@ -78,12 +77,13 @@ class Population {
         let worldrecord = 0.0;
         let index = 0;
         for(let i = 0; i < this.population.length; i++) {
-            index = i;
-            worldrecord = this.population[i].fitness;
+            if(this.population[i].fitness > worldrecord){
+                index = i;
+                worldrecord = this.population[i].fitness;
+            }
         }
-
         this.best = this.population[index].getPhrase();
-        if(worldrecord === this.perfectScore) {
+        if(worldrecord >= this.perfectScore) {
             this.finished = true;
         }
     }
@@ -106,10 +106,10 @@ class Population {
 
     allPhrases() {
         let everything = "";
-        let displayLimit = min(this.population.length, 50);
+        let displayLimit = Math.min(this.population.length, 50);
 
         for(let i = 0; i < displayLimit; i ++) {
-            everything += this.population[i].getPhrase() + "<p>";
+            everything += this.population[i].getPhrase() + "<br>";
         }
         return everything; 
     }
