@@ -1,7 +1,6 @@
 class Population {
     constructor (p, m, num) {
         this.population; //current population
-        this.matingPool; //ArrayList for mating
         this.generations = 0; // number of generations passed
         this.finished = false; // done?
         this.target = p; 
@@ -17,7 +16,6 @@ class Population {
             this.population[i] = new DNA(this.target.length)
         }
 
-        this.matingPool = [];
         this.calcFitness();
     }
 
@@ -29,42 +27,37 @@ class Population {
 
     generate () {
         // this should be oposite for to calculate the least number, or calculate most cells covered?
-        let maxFitness = 0;
-        for(let i = 0; i < this.population.length; i ++) {
-            if(this.population[i].fitness > maxFitness) { 
-                maxFitness = this.population[i].fitness;
-            }
+        let fitnessSum = 0
+        for(let i = 0; i < this.population.length; i++){
+            fitnessSum += this.population[i].fitness
         }
-        
+
+        this.population = this.population.sort((a, b) => (a.fitness <= b.fitness) ? 1 : -1)
+
         let newPopulation = [];
-        for(let i = 0; i < this.population.length; i++) {
-            let partnerA = this.acceptReject(maxFitness);
-            let partnerB = this.acceptReject(maxFitness);
-            let child = partnerA.crossover(partnerB);
-            child.mutate(this.mutationRate);
-            newPopulation[i] = child;
+        
+        //add inmortals here
+        // this.population - inmortal num
+        for(let i = 0; i < this.population.length; i++){
+            const partnerA = this.naturalSelection(fitnessSum)
+            const partnerB = this.naturalSelection(fitnessSum)
+            let child = partnerA.crossover(partnerB)
+            child.mutate(this.mutationRate)
+            newPopulation[i] = child
         }
 
         this.population = newPopulation;
-        this.generations++;
+        this.generations ++;
     }
 
-    acceptReject(maxFitness){
-        let besafe = 0
-        while (true) {
-            let index = Math.floor(Math.random() * this.population.length);
-            let partner = this.population[index];
-            let r = Math.random() * maxFitness;
-            // console.log("PARTNER FITNESS: ", partner.fitness)
-            // console.log("FITNESS BENCHMARK: ", r)
-            if(r < partner.fitness){
-                return partner
-            }
+    naturalSelection(fitnessSum){
+        let naturalSelector = Math.random() * fitnessSum
+        
+        for(let i = 0; i < this.population.length; i++){
+            fitnessSum -= this.population[i].fitness
+            if(fitnessSum  < naturalSelector){
+                return this.population[i]
 
-            besafe++;
-            if(besafe > 10000) {
-                console.error("partner not found")
-                return null
             }
         }
     }
