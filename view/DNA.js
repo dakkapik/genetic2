@@ -21,13 +21,20 @@ class DNA {
 
     // returns fitness number based on target
     calcFitness(target) {
+        //maybe also sort?
         let score = 0;
         for (let i = 0; i < this.genes.length; i++) {
             if(this.genes[i] == target[i]){
                 score ++;
             }
         }
-        this.fitness = score / target.length;
+
+        //fitness can be exponential or not
+        this.fitness = score / target.length
+        this.fitness = Math.pow(this.fitness , 2) + 0.001;
+        //NORMALISE: FITNESS > 0 && FITNESS < 1 
+        //TEST HERE FOR MORE RESULTS
+        // the bigger the population the more effect the exponential has
     }
 
     crossover (partner) {
