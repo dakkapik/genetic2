@@ -58,13 +58,14 @@ const interval = setInterval(() => {
     }
     
     displayInfo();
-}, 100)
+}, 5)
 
 
 function setUp () {
     target = "To be or not to be.";
-    popmax = 200;
+    popmax = 1000;
     mutationRate = 0.01;
+    //POPULATION AMOUNT INCREASES SPEED
     
     population = new Population(target, mutationRate, popmax);
     
