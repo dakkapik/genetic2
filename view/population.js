@@ -39,6 +39,10 @@ class Population {
         //add inmortals here
         // this.population - inmortal num
         for(let i = 0; i < this.population.length; i++){
+            if(this.population[i].immortal){
+                this.population[i].immortal = false
+                newPopulation.push(this.population[i])
+            }
             const partnerA = this.naturalSelection(fitnessSum)
             const partnerB = this.naturalSelection(fitnessSum)
             let child = partnerA.crossover(partnerB)
