@@ -6,12 +6,12 @@ html, body{
 }
 
 #best-phrase-container {
-    width: 30rem;
-    height: 30rem;
+    width: 40rem;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-right: 5rem;
 }
 
 #all-phrases-container {
@@ -19,4 +19,8 @@ html, body{
     width: 50%;
     height: 100vh;
     overflow: hidden;
+}
+
+#best-phrase-container > div {
+    display: flex;
 }

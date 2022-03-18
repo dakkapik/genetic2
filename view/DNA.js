@@ -9,6 +9,7 @@ class DNA {
     constructor(num) {
         this.genes = []
         this.fitness = 0;
+        this.immortal = false;
         for (let i = 0; i < num; i++){
             this.genes[i] = newChar();
         }

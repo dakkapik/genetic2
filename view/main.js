@@ -62,8 +62,9 @@ const interval = setInterval(() => {
 
 
 function setUp () {
-    target = "To be or not to be.";
-    popmax = 1000;
+    // target = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores vel ex, odit porro a quaerat at cupiditate commodi ratione repudiandae impedit veritatis in? Soluta hic dignissimos nemo! Odio, ipsam libero!";
+    target = "To be or nor to be."
+    popmax = 2000;
     mutationRate = 0.01;
     //POPULATION AMOUNT INCREASES SPEED
     
@@ -92,14 +93,11 @@ function displayInfo() {
     document.getElementById("best-phrase").innerHTML = answer;
     document.getElementById("target").innerHTML = target;
     
-
-    let statstext =
-        "total generations:     " + population.getGenerations() + "<br>";
-    statstext +=
-        "average fitness:       " + population.getAverageFitness() + "<br>";
-    statstext += "total population:      " + popmax + "<br>";
-    statstext += "mutation rate:         " + Math.floor(mutationRate * 100) + "%";
-
-    document.getElementById("stats").innerHTML = statstext;
+    document.getElementById("current-gen").innerHTML = population.getGenerations()
+    document.getElementById("average-fitness").innerHTML = population.getAverageFitness()
+    document.getElementById("total-population").innerHTML = popmax
+    document.getElementById("mutation-rate").innerHTML = Math.floor(mutationRate * 100) + "%"
+    
+    // document.getElementById("stats").innerHTML = statstext;
     document.getElementById("all-phrases-container").innerHTML = "All phrases:<br>" + population.allPhrases()
 }
