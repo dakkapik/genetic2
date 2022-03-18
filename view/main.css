@@ -15,6 +15,7 @@ html, body{
 }
 
 #all-phrases-container {
+    position: static;
     width: 50%;
     height: 100vh;
     overflow: hidden;

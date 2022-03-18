@@ -58,7 +58,7 @@ const interval = setInterval(() => {
     }
     
     displayInfo();
-}, 5)
+}, 50)
 
 
 function setUp () {
